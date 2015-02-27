@@ -25,6 +25,7 @@ import com.lodenrogue.grizzly.http.request.ObjectRequest;
 import com.lodenrogue.grizzly.http.request.Request;
 import com.lodenrogue.grizzly.http.request.RequestType;
 import com.lodenrogue.grizzly.http.request.ResponseRequest;
+import com.lodenrogue.grizzly.http.CookieUtils;
 
 /**
  * PostHandler handles posting and requesting data to/from http.
@@ -45,9 +46,11 @@ public class PostHandler {
 	 * 
 	 * @param uri String uri address where post is being sent.
 	 * @param postData NameValuePair data to be posted.
+	 * 
+	 * @return Returns http response status code
 	 */
-	public void post(String uri, List<NameValuePair> postData) {
-		postAndStoreCookies(uri, postData, null, null);
+	public int post(String uri, List<NameValuePair> postData) {
+		return postAndStoreCookies(uri, postData, null, null);
 	}
 
 	/**
@@ -61,14 +64,17 @@ public class PostHandler {
 	 * @param postData NameValuePair data to be posted.
 	 * @param cookiesFileName Name of the file where cookies are to be
 	 *                stored.
+	 * 
+	 * @return Returns http response status code
 	 */
-	public void postAndStoreCookies(String uri, List<NameValuePair> postData, Context context, String cookiesFileName) {
+	public int postAndStoreCookies(String uri, List<NameValuePair> postData, Context context, String cookiesFileName) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(uri);
+		HttpResponse httpResponse = null;
 
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(postData));
-			HttpResponse httpResponse = httpClient.execute(httpPost);
+			httpResponse = httpClient.execute(httpPost);
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 			rawStringResponse = EntityUtils.toString(httpEntity, "UTF-8");
@@ -92,6 +98,8 @@ public class PostHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return httpResponse != null ? httpResponse.getStatusLine().getStatusCode() : -1;
 	}
 
 	/**
