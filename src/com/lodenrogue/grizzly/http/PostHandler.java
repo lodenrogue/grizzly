@@ -25,7 +25,6 @@ import com.lodenrogue.grizzly.http.request.ObjectRequest;
 import com.lodenrogue.grizzly.http.request.Request;
 import com.lodenrogue.grizzly.http.request.RequestType;
 import com.lodenrogue.grizzly.http.request.ResponseRequest;
-import com.lodenrogue.grizzly.http.CookieUtils;
 
 /**
  * PostHandler handles posting and requesting data to/from http.
